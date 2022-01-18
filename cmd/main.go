@@ -12,8 +12,17 @@ func main() {
 	var param = args.Args{}
 	param.Parse()
 
-	var srv = server.GetServer(*param.Address)
-	if err := srv.ListenAndServe(); err != nil {
+	var srv = server.GetServer(*param.Address, *param.Location)
+	var err error
+
+	if param.IsHttps() {
+		err = srv.ListenAndServeTLS(*param.SSLcert, *param.SSLkey)
+
+	} else {
+		err = srv.ListenAndServe()
+	}
+
+	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v", err)
 		os.Exit(1)
 	}
