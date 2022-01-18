@@ -9,10 +9,9 @@ import (
 	"time"
 )
 
-func GetServer(address string) *http.Server {
+func GetServer(address string, location string) *http.Server {
 	var mux = http.NewServeMux()
-	mux.HandleFunc("/", RootHandler)
-	mux.HandleFunc("/api", ApiHandler)
+	mux.HandleFunc(location, ApiHandler)
 
 	var logger = log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
@@ -25,10 +24,6 @@ func GetServer(address string) *http.Server {
 		WriteTimeout:      time.Second * 20,
 		ReadHeaderTimeout: time.Second * 20,
 	}
-}
-
-func RootHandler(rw http.ResponseWriter, req *http.Request) {
-	http.Redirect(rw, req, "/api", http.StatusMovedPermanently)
 }
 
 func ApiHandler(rw http.ResponseWriter, req *http.Request) {
