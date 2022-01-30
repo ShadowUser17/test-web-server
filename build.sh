@@ -6,7 +6,7 @@ MAIN="${CMD}/main.go"
 case $1 in
     "linux-amd64")   export GOOS="linux"   GOARCH="amd64" ;;
     "darwin-amd64")  export GOOS="darwin"  GOARCH="amd64" ;;
-    "freebsd-amd64") export GOOS="reebsd"  GOARCH="amd64" ;;
+    "freebsd-amd64") export GOOS="freebsd" GOARCH="amd64" ;;
     "windows-amd64") export GOOS="windows" GOARCH="amd64" ;;
 
     "clean")
