@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/ShadowUser17/TestWebServer/pkg/args"
@@ -9,21 +8,20 @@ import (
 )
 
 func main() {
-	var param = args.Args{}
-	param.Parse()
-
-	var srv = server.GetServer(*param.Address, *param.Location)
+	var params = new(args.Args).Parse()
+	var router = server.GetRouter(*params.Location)
+	var srv = server.GetServer(*params.Address, router)
 	var err error
 
-	if param.IsHttps() {
-		err = srv.ListenAndServeTLS(*param.SSLcert, *param.SSLkey)
+	if !params.IsHttps() {
+		err = srv.ListenAndServe()
 
 	} else {
-		err = srv.ListenAndServe()
+		err = srv.ListenAndServeTLS(*params.SSLcert, *params.SSLkey)
 	}
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v", err)
+		router.Logger.Printf("Error: %v\n", err)
 		os.Exit(1)
 	}
 }
