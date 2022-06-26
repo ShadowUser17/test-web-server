@@ -22,9 +22,11 @@ func main() {
 			}
 		}
 
+		router.Logger.Printf("Listen: https://%s%s\n", *params.Address, *params.Location)
 		err = srv.ListenAndServeTLS(*params.SSLcert, *params.SSLkey)
 
 	} else {
+		router.Logger.Printf("Listen: http://%s%s\n", *params.Address, *params.Location)
 		err = srv.ListenAndServe()
 	}
 
