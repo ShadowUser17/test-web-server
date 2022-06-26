@@ -1,29 +1,35 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/ShadowUser17/TestWebServer/pkg/args"
+	"github.com/ShadowUser17/TestWebServer/pkg/cert"
 	"github.com/ShadowUser17/TestWebServer/pkg/server"
 )
 
 func main() {
-	var param = args.Args{}
-	param.Parse()
-
-	var srv = server.GetServer(*param.Address, *param.Location)
+	var params = new(args.Args).Parse()
+	var router = server.GetRouter(*params.Location)
+	var srv = server.GetServer(*params.Address, router)
 	var err error
 
-	if param.IsHttps() {
-		err = srv.ListenAndServeTLS(*param.SSLcert, *param.SSLkey)
+	if *params.SSLmode {
+		if !params.CertIsExist() {
+			if _, _, err := cert.MakeCert("./", "localhost"); err != nil {
+				router.Logger.Printf("Error: %v\n", err)
+				os.Exit(2)
+			}
+		}
+
+		err = srv.ListenAndServeTLS(*params.SSLcert, *params.SSLkey)
 
 	} else {
 		err = srv.ListenAndServe()
 	}
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v", err)
+		router.Logger.Printf("Error: %v\n", err)
 		os.Exit(1)
 	}
 }
