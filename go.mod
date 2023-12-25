@@ -1,3 +1,3 @@
-module github.com/ShadowUser17/TestWebServer
+module github.com/ShadowUser17/test-web-server
 
-go 1.17
+go 1.20
