@@ -22,3 +22,11 @@ docker login -u "${DOCKERHUB_LOGIN}" -p "${DOCKERHUB_TOKEN}"
 ```bash
 docker push --all-tags "shadowuser17/test-web-server"
 ```
+
+#### Deploy to K8S:
+```bash
+kubectl create ns testing
+```
+```bash
+kubectl apply -f k8s/deploy.yml -n testing
+```
