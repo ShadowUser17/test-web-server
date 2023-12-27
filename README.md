@@ -12,5 +12,13 @@ go build -ldflags="-s -w" -o ./server ./cmd/main.go
 
 #### Build docker image:
 ```bash
-docker build -t test-web-server:latest .
+docker build -t "shadowuser17/test-web-server:latest" .
+```
+
+#### Publish docker image:
+```bash
+docker login -u "${DOCKERHUB_LOGIN}" -p "${DOCKERHUB_TOKEN}"
+```
+```bash
+docker push --all-tags "shadowuser17/test-web-server"
 ```
