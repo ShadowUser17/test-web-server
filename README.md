@@ -30,3 +30,9 @@ kubectl create ns testing
 ```bash
 kubectl apply -f k8s/deploy.yml -n testing
 ```
+```bash
+kubectl apply -f k8s/ingress.yml -n testing
+```
+```bash
+kubectl apply -f k8s/alertmanager.yml -n testing
+```

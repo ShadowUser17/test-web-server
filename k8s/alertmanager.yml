@@ -1,0 +1,40 @@
+apiVersion: "monitoring.coreos.com/v1alpha1"
+kind: "AlertmanagerConfig"
+metadata:
+  name: "test-web-server"
+  labels:
+    release: "prom-operator"
+spec:
+  route:
+    groupBy: ["alertname", "severity"]
+    receiver: "test-web-server"
+    groupWait: "30s"
+    groupInterval: "5m"
+    repeatInterval: "1h"
+    routes:
+      - receiver: "test-web-server"
+        groupWait: "30s"
+        groupInterval: "5m"
+        repeatInterval: "3h"
+        matchers:
+          - name: "severity"
+            value: "warning"
+      - receiver: "test-web-server"
+        groupWait: "30s"
+        groupInterval: "5m"
+        repeatInterval: "2h"
+        matchers:
+          - name: "severity"
+            value: "error"
+      - receiver: "test-web-server"
+        groupWait: "30s"
+        groupInterval: "5m"
+        repeatInterval: "1h"
+        matchers:
+          - name: "severity"
+            value: "critical"
+  receivers:
+    - name: "test-web-server"
+      webhookConfigs:
+        - url: "http://test-web-server.testing.svc:9092/"
+          sendResolved: true
