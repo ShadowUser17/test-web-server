@@ -1,0 +1,17 @@
+apiVersion: "networking.k8s.io/v1"
+kind: "Ingress"
+metadata:
+  name: "test-web-server"
+spec:
+  ingressClassName: "nginx"
+  rules:
+    - host: "testing.k3s"
+      http:
+        paths:
+          - path: "/"
+            pathType: "Prefix"
+            backend:
+              service:
+                name: "test-web-serverr"
+                port:
+                  number: 9092
