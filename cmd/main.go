@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"regexp"
-	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -15,7 +15,8 @@ import (
 )
 
 var (
-	listenAddress = flag.String("address", "localhost:9092", "")
+	listenAddress = flag.String("address", "localhost:9092", "Set listen address.")
+	metricsPath   = flag.String("metrics", "/metrics", "Set path for metrics.")
 )
 
 func main() {
@@ -35,21 +36,21 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 	var httpRouter = gin.New()
 
-	httpRouter.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
-		return fmt.Sprintf(
-			"[%s] %s -> %s %s %d %s\n",
-			param.TimeStamp.Format(time.RFC1123),
-			param.ClientIP,
-			param.Method,
-			param.Path,
-			param.StatusCode,
-			param.Latency,
-		)
-	}))
-
 	var promMetricHandler = promhttp.HandlerFor(promRegistry, promhttp.HandlerOpts{EnableOpenMetrics: true})
-	httpRouter.GET("/metrics", func(ctx *gin.Context) {
+	httpRouter.GET(*metricsPath, func(ctx *gin.Context) {
 		promMetricHandler.ServeHTTP(ctx.Writer, ctx.Request)
+	})
+
+	httpRouter.NoRoute(func(ctx *gin.Context) {
+		fmt.Fprintf(os.Stdout, "%s -> %s %s\n", ctx.Request.RemoteAddr, ctx.Request.Method, ctx.Request.URL.Path)
+
+		switch ctx.Request.Method {
+		case "POST", "PUT":
+			io.Copy(os.Stdout, ctx.Request.Body)
+			fmt.Fprint(os.Stdout, "\n\n")
+		}
+
+		ctx.Status(200)
 	})
 
 	fmt.Fprintf(os.Stdout, "Listen on %s\n", *listenAddress)
