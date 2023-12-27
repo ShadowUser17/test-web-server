@@ -1,0 +1,14 @@
+apiVersion: "monitoring.coreos.com/v1"
+kind: "PodMonitor"
+metadata:
+  name: "test-web-server"
+  labels:
+    release: "prom-operator"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "test-web-server"
+  podMetricsEndpoints:
+    - port: "http"
+      interval: "30s"
+      honorLabels: true
