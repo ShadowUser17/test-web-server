@@ -57,3 +57,8 @@ spec:
             - name: "http"
               protocol: "TCP"
               containerPort: 9092
+          resources:
+            requests:
+              memory: "32Mi"
+            limits:
+              memory: "32Mi"
