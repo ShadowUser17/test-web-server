@@ -27,11 +27,15 @@ func main() {
 		collectors.NewBuildInfoCollector(),
 		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
 		collectors.NewGoCollector(collectors.WithGoCollectorRuntimeMetrics(
-			collectors.GoRuntimeMetricsRule{
-				Matcher: regexp.MustCompile("/.*"),
-			},
+			collectors.GoRuntimeMetricsRule{Matcher: regexp.MustCompile("/.*")},
 		)),
 	)
+
+	var httpRequests = prometheus.NewCounterVec(
+		prometheus.CounterOpts{Name: "http_requests"},
+		[]string{"method", "path"},
+	)
+	promRegistry.MustRegister(httpRequests)
 
 	gin.SetMode(gin.ReleaseMode)
 	var httpRouter = gin.New()
@@ -45,11 +49,15 @@ func main() {
 		fmt.Fprintf(os.Stdout, "%s -> %s %s\n", ctx.Request.RemoteAddr, ctx.Request.Method, ctx.Request.URL.Path)
 
 		switch ctx.Request.Method {
+		case "GET":
+			fmt.Fprintf(ctx.Writer, "%s\n", ctx.Request.RemoteAddr)
+
 		case "POST", "PUT":
 			io.Copy(os.Stdout, ctx.Request.Body)
 			fmt.Fprint(os.Stdout, "\n\n")
 		}
 
+		httpRequests.WithLabelValues(ctx.Request.Method, ctx.Request.URL.Path).Inc()
 		ctx.Status(200)
 	})
 
