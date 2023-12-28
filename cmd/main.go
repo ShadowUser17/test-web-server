@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"regexp"
 
@@ -17,6 +18,7 @@ import (
 var (
 	listenAddress = flag.String("l", "localhost:9092", "Set listen address.")
 	metricsPath   = flag.String("m", "/metrics", "Set path for metrics.")
+	enableLogging = flag.Bool("v", false, "Enable request logging.")
 )
 
 func main() {
@@ -33,7 +35,7 @@ func main() {
 
 	var httpRequests = prometheus.NewCounterVec(
 		prometheus.CounterOpts{Name: "http_requests"},
-		[]string{"method", "path"},
+		[]string{"method", "path", "status"},
 	)
 	promRegistry.MustRegister(httpRequests)
 
@@ -46,24 +48,33 @@ func main() {
 	})
 
 	httpRouter.NoRoute(func(ctx *gin.Context) {
-		ctx.Status(200)
-		httpRequests.WithLabelValues(ctx.Request.Method, ctx.Request.URL.Path).Inc()
-		fmt.Fprintf(os.Stdout, "%s -> %s %s %d\n",
-			ctx.Request.RemoteAddr,
-			ctx.Request.Method,
-			ctx.Request.URL.Path,
-			ctx.Writer.Status(),
-		)
-
 		switch ctx.Request.Method {
 		case "GET":
-			fmt.Fprintf(ctx.Writer, "%s\n", ctx.Request.RemoteAddr)
+			ctx.String(http.StatusOK, ctx.Request.RemoteAddr)
 
-		case "POST", "PUT":
-			fmt.Fprint(os.Stdout, "DATA: ")
+		case "POST":
+			ctx.Status(http.StatusOK)
 			io.Copy(os.Stdout, ctx.Request.Body)
 			fmt.Fprint(os.Stdout, "\n")
+
+		default:
+			ctx.Status(http.StatusMethodNotAllowed)
 		}
+
+		if *enableLogging {
+			fmt.Fprintf(os.Stdout, "%s -> %s %s %d\n",
+				ctx.Request.RemoteAddr,
+				ctx.Request.Method,
+				ctx.Request.URL.Path,
+				ctx.Writer.Status(),
+			)
+		}
+
+		httpRequests.WithLabelValues(
+			ctx.Request.Method,
+			ctx.Request.URL.Path,
+			fmt.Sprintf("%d", ctx.Writer.Status()),
+		).Inc()
 	})
 
 	fmt.Fprintf(os.Stdout, "Listen on %s\n", *listenAddress)
