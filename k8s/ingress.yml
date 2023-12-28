@@ -12,6 +12,6 @@ spec:
             pathType: "Prefix"
             backend:
               service:
-                name: "test-web-serverr"
+                name: "test-web-server"
                 port:
                   number: 9092
