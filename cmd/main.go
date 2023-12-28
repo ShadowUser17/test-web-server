@@ -46,19 +46,24 @@ func main() {
 	})
 
 	httpRouter.NoRoute(func(ctx *gin.Context) {
-		fmt.Fprintf(os.Stdout, "%s -> %s %s\n", ctx.Request.RemoteAddr, ctx.Request.Method, ctx.Request.URL.Path)
+		ctx.Status(200)
+		httpRequests.WithLabelValues(ctx.Request.Method, ctx.Request.URL.Path).Inc()
+		fmt.Fprintf(os.Stdout, "%s -> %s %s %d\n",
+			ctx.Request.RemoteAddr,
+			ctx.Request.Method,
+			ctx.Request.URL.Path,
+			ctx.Writer.Status(),
+		)
 
 		switch ctx.Request.Method {
 		case "GET":
 			fmt.Fprintf(ctx.Writer, "%s\n", ctx.Request.RemoteAddr)
 
 		case "POST", "PUT":
+			fmt.Fprint(os.Stdout, "DATA: ")
 			io.Copy(os.Stdout, ctx.Request.Body)
-			fmt.Fprint(os.Stdout, "\n\n")
+			fmt.Fprint(os.Stdout, "\n")
 		}
-
-		httpRequests.WithLabelValues(ctx.Request.Method, ctx.Request.URL.Path).Inc()
-		ctx.Status(200)
 	})
 
 	fmt.Fprintf(os.Stdout, "Listen on %s\n", *listenAddress)
