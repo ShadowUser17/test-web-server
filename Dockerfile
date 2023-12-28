@@ -1,4 +1,4 @@
-FROM golang:1.21.5-alpine AS Dev
+FROM golang:1.21-alpine AS Dev
 WORKDIR /root
 COPY ./ ./
 RUN go mod tidy
@@ -9,4 +9,4 @@ WORKDIR /root
 COPY --from=Dev /root/server /usr/local/bin/
 EXPOSE 9092/tcp
 ENTRYPOINT ["/usr/local/bin/server"]
-CMD ["-address", "0.0.0.0:9092"]
+CMD ["-l", "0.0.0.0:9092"]

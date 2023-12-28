@@ -15,8 +15,8 @@ import (
 )
 
 var (
-	listenAddress = flag.String("address", "localhost:9092", "Set listen address.")
-	metricsPath   = flag.String("metrics", "/metrics", "Set path for metrics.")
+	listenAddress = flag.String("l", "localhost:9092", "Set listen address.")
+	metricsPath   = flag.String("m", "/metrics", "Set path for metrics.")
 )
 
 func main() {
