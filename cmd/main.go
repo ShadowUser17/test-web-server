@@ -26,7 +26,6 @@ func main() {
 
 	var promRegistry = prometheus.NewRegistry()
 	promRegistry.MustRegister(
-		collectors.NewBuildInfoCollector(),
 		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
 		collectors.NewGoCollector(collectors.WithGoCollectorRuntimeMetrics(
 			collectors.GoRuntimeMetricsRule{Matcher: regexp.MustCompile("/.*")},
