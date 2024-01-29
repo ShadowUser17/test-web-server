@@ -1,0 +1,16 @@
+apiVersion: "monitoring.coreos.com/v1"
+kind: "Probe"
+metadata:
+  name: "test-web-server"
+  labels:
+    release: "prom-operator"
+spec:
+  prober:
+    url: "prober-prometheus-blackbox-exporter.monitoring.svc:9115"
+  module: "http_2xx"
+  interval: "60s"
+  targets:
+    ingress:
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: "test-web-server"

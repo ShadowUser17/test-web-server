@@ -34,6 +34,9 @@ kubectl apply -f k8s/deploy.yml -n testing
 kubectl apply -f k8s/ingress.yml -n testing
 ```
 ```bash
+kubectl apply -f k8s/probes.yml -n testing
+```
+```bash
 kubectl apply -f k8s/monitoring.yml -n testing
 ```
 ```bash
