@@ -31,6 +31,9 @@ kubectl create ns testing
 kubectl apply -f k8s/deploy.yml -n testing
 ```
 ```bash
+kubectl apply -f k8s/network.yml -n testing
+```
+```bash
 kubectl apply -f k8s/ingress.yml -n testing
 ```
 ```bash
