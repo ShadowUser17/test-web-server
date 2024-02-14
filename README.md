@@ -15,6 +15,11 @@ go build -ldflags="-s -w" -o ./server ./cmd/main.go
 docker build -t "shadowuser17/test-web-server:latest" .
 ```
 
+#### Scan docker image:
+```bash
+trivy image "shadowuser17/test-web-server:latest"
+```
+
 #### Publish docker image:
 ```bash
 docker login -u "${DOCKERHUB_LOGIN}" -p "${DOCKERHUB_TOKEN}"
