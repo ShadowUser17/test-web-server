@@ -17,10 +17,10 @@ docker build -t "shadowuser17/test-web-server:latest" .
 
 #### Scan docker image:
 ```bash
-trivy image "shadowuser17/test-web-server:latest"
+dockle "shadowuser17/test-web-server:latest"
 ```
 ```bash
-trivy image -f json -o report.json --list-all-pkgs "shadowuser17/test-web-server:latest"
+trivy image "shadowuser17/test-web-server:latest"
 ```
 
 #### Publish docker image:
