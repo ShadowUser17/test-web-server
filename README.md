@@ -2,6 +2,11 @@
 - [gin](https://github.com/gin-gonic/gin/tree/v1.9.1)
 - [prometheus](https://github.com/prometheus/client_golang/tree/v1.19.0)
 
+#### Validate project files:
+```bash
+golangci-lint run
+```
+
 #### Build binary file:
 ```bash
 go mod tidy
@@ -28,7 +33,7 @@ trivy image "shadowuser17/test-web-server:latest"
 docker login -u "${DOCKERHUB_LOGIN}" -p "${DOCKERHUB_TOKEN}"
 ```
 ```bash
-docker push --all-tags "shadowuser17/test-web-server"
+docker push "shadowuser17/test-web-server:latest"
 ```
 
 #### Deploy to K8S:
