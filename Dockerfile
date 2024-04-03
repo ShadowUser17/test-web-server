@@ -1,4 +1,4 @@
-FROM golang:1.22.1-alpine AS Dev
+FROM golang:1.22.2-alpine AS Dev
 WORKDIR /root
 COPY ./ ./
 RUN go mod tidy
