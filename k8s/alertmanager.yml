@@ -11,28 +11,10 @@ spec:
     groupWait: "30s"
     groupInterval: "5m"
     repeatInterval: "1h"
-    routes:
-      - receiver: "test-web-server"
-        groupWait: "30s"
-        groupInterval: "5m"
-        repeatInterval: "3h"
-        matchers:
-          - name: "severity"
-            value: "warning"
-      - receiver: "test-web-server"
-        groupWait: "30s"
-        groupInterval: "5m"
-        repeatInterval: "2h"
-        matchers:
-          - name: "severity"
-            value: "error"
-      - receiver: "test-web-server"
-        groupWait: "30s"
-        groupInterval: "5m"
-        repeatInterval: "1h"
-        matchers:
-          - name: "severity"
-            value: "critical"
+    matchers:
+      - name: "severity"
+        value: "info|testing|warning|error|critical"
+        matchType: "=~"
   receivers:
     - name: "test-web-server"
       webhookConfigs:
