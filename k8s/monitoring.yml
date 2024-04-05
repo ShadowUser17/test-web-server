@@ -10,5 +10,5 @@ spec:
       app.kubernetes.io/name: "test-web-server"
   podMetricsEndpoints:
     - port: "http"
-      interval: "30s"
+      interval: "1m"
       honorLabels: true
