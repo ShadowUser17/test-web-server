@@ -16,11 +16,15 @@ go build -ldflags="-s -w" -o ./server ./cmd/main.go
 ```
 
 #### Build docker image:
-- Stable version:
+- Prune build cache:
+```bash
+earthly prune
+```
+- Build stable version:
 ```bash
 earthly +all --tag="latest"
 ```
-- Testing version:
+- Build testing version:
 ```bash
 earthly +all --tag="testing"
 ```
@@ -38,7 +42,7 @@ trivy image "shadowuser17/test-web-server:latest"
 docker login -u "${DOCKERHUB_LOGIN}" -p "${DOCKERHUB_TOKEN}"
 ```
 ```bash
-docker push "shadowuser17/test-web-server:latest"
+earthly --push +all --tag="latest"
 ```
 
 #### Deploy to K8S:
