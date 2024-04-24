@@ -6,7 +6,7 @@ build:
     COPY . .
     RUN go mod tidy
     RUN go build -ldflags="-s -w" -o server cmd/main.go
-    SAVE ARTIFACT server AS LOCAL server
+    SAVE ARTIFACT server
 
 docker:
     ARG tag="latest"
@@ -15,7 +15,7 @@ docker:
     EXPOSE 9092/tcp
     ENTRYPOINT ["/usr/local/bin/server"]
     CMD ["-l", "0.0.0.0:9092"]
-    SAVE IMAGE shadowuser17/test-web-server:$tag
+    SAVE IMAGE --push "shadowuser17/test-web-server:$tag"
 
 all:
     BUILD +build

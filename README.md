@@ -18,11 +18,11 @@ go build -ldflags="-s -w" -o ./server ./cmd/main.go
 #### Build docker image:
 - Stable version:
 ```bash
-docker build -t "shadowuser17/test-web-server:latest" .
+earthly +all --tag="latest"
 ```
 - Testing version:
 ```bash
-docker build -t "shadowuser17/test-web-server:testing" .
+earthly +all --tag="testing"
 ```
 
 #### Scan docker image:
