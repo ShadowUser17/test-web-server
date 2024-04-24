@@ -3,7 +3,8 @@ FROM golang:1.22.2-alpine
 WORKDIR /root
 
 build:
-    COPY . .
+    COPY cmd cmd
+    COPY go.* .
     RUN go mod tidy
     RUN go build -ldflags="-s -w" -o server cmd/main.go
     SAVE ARTIFACT server
