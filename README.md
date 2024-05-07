@@ -1,5 +1,5 @@
 #### Dependencies:
-- [gin](https://github.com/gin-gonic/gin/tree/v1.9.1)
+- [gin](https://github.com/gin-gonic/gin/tree/v1.10.0)
 - [prometheus](https://github.com/prometheus/client_golang/tree/v1.19.0)
 
 #### Validate project files:
