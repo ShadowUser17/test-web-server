@@ -1,6 +1,6 @@
 #### Dependencies:
 - [gin](https://github.com/gin-gonic/gin/tree/v1.10.0)
-- [prometheus](https://github.com/prometheus/client_golang/tree/v1.19.1)
+- [prometheus](https://github.com/prometheus/client_golang/tree/v1.20.1)
 
 #### Validate project files:
 ```bash
@@ -31,10 +31,10 @@ earthly +all --tag="testing"
 
 #### Scan docker image:
 ```bash
-dockle "shadowuser17/test-web-server:latest"
+dockle "shadowuser17/test-web-server:testing"
 ```
 ```bash
-trivy image "shadowuser17/test-web-server:latest"
+trivy image "shadowuser17/test-web-server:testing"
 ```
 
 #### Publish docker image:
@@ -43,6 +43,9 @@ docker login -u "${DOCKERHUB_LOGIN}" -p "${DOCKERHUB_TOKEN}"
 ```
 ```bash
 earthly --push +all --tag="latest"
+```
+```bash
+earthly --push +all --tag="testing"
 ```
 
 #### Deploy to K8S:
