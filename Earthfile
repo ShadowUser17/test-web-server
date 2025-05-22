@@ -1,5 +1,5 @@
 VERSION 0.8
-FROM golang:1.22.8-alpine
+FROM golang:1.23.9-alpine
 WORKDIR /root
 
 build:
